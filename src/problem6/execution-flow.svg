@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" font-family="Arial, sans-serif">
+  <defs>
+    <style>
+      .box { fill: #f0f4f8; stroke: #334e68; stroke-width: 2; }
+      .primary { fill: #667eea; stroke: #5a67d8; }
+      .secondary { fill: #4fd1c5; stroke: #38b2ac; }
+      .tertiary { fill: #fc8181; stroke: #f56565; }
+      .quaternary { fill: #f6ad55; stroke: #ed8936; }
+      .text { fill: #1a202c; font-size: 14px; font-weight: 600; }
+      .text-light { fill: #ffffff; font-size: 13px; font-weight: 500; }
+      .arrow { stroke: #4a5568; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { fill: #4a5568; font-size: 12px; font-weight: 500; }
+      .step { fill: #667eea; font-size: 11px; font-weight: 700; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4a5568" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1a202c">
+    Scoreboard Service - Execution Flow
+  </text>
+  
+  <!-- Browser -->
+  <rect class="box primary" x="50" y="80" width="120" height="80" rx="8"/>
+  <text class="text-light" x="110" y="110" text-anchor="middle">Browser</text>
+  <text class="text-light" x="110" y="130" text-anchor="middle" font-size="11">(Web/SSE)</text>
+  
+  <!-- API Edge -->
+  <rect class="box secondary" x="280" y="80" width="160" height="80" rx="8"/>
+  <text class="text-light" x="360" y="105" text-anchor="middle">API Edge</text>
+  <text class="text-light" x="360" y="125" text-anchor="middle" font-size="11">Auth + Rate Limit</text>
+  <text class="text-light" x="360" y="145" text-anchor="middle" font-size="10">(REST/gRPC)</text>
+  
+  <!-- Scoreboard Service -->
+  <rect class="box tertiary" x="560" y="80" width="180" height="80" rx="8"/>
+  <text class="text-light" x="650" y="110" text-anchor="middle">Scoreboard Service</text>
+  <text class="text-light" x="650" y="130" text-anchor="middle" font-size="11">(This module)</text>
+  
+  <!-- PostgreSQL -->
+  <rect class="box quaternary" x="580" y="280" width="140" height="70" rx="8"/>
+  <text class="text" x="650" y="310" text-anchor="middle">PostgreSQL</text>
+  <text class="text" x="650" y="330" text-anchor="middle" font-size="12">System of Record</text>
+  
+  <!-- Redis Streams -->
+  <rect class="box quaternary" x="580" y="440" width="140" height="70" rx="8"/>
+  <text class="text" x="650" y="470" text-anchor="middle">Redis Streams</text>
+  <text class="text" x="650" y="490" text-anchor="middle" font-size="12">Event Bus</text>
+  
+  <!-- WebSocket/SSE Hub -->
+  <rect class="box secondary" x="280" y="600" width="160" height="80" rx="8"/>
+  <text class="text-light" x="360" y="630" text-anchor="middle">WebSocket/SSE</text>
+  <text class="text-light" x="360" y="650" text-anchor="middle">Hub</text>
+  
+  <!-- CDN / Edge Cache -->
+  <rect class="box secondary" x="880" y="600" width="160" height="80" rx="8"/>
+  <text class="text-light" x="960" y="630" text-anchor="middle">CDN / Edge</text>
+  <text class="text-light" x="960" y="650" text-anchor="middle">Cache</text>
+  
+  <!-- Connected UIs -->
+  <rect class="box primary" x="50" y="760" width="120" height="70" rx="8"/>
+  <text class="text-light" x="110" y="790" text-anchor="middle">Connected</text>
+  <text class="text-light" x="110" y="810" text-anchor="middle">UIs</text>
+  
+  <!-- SEO clients -->
+  <rect class="box primary" x="920" y="760" width="120" height="70" rx="8"/>
+  <text class="text-light" x="980" y="790" text-anchor="middle">SEO Clients</text>
+  <text class="text-light" x="980" y="810" text-anchor="middle">/ API</text>
+  
+  <!-- Arrows and Labels -->
+  
+  <!-- Step 1: Browser to API Edge -->
+  <path class="arrow" d="M 170 120 L 280 120"/>
+  <text class="step" x="215" y="110">1</text>
+  <text class="label" x="195" y="145">HTTPS</text>
+  <text class="label" x="185" y="158" font-size="10">POST /scores/increment</text>
+  
+  <!-- Step 2: API Edge to Scoreboard Service -->
+  <path class="arrow" d="M 440 120 L 560 120"/>
+  <text class="step" x="490" y="110">2</text>
+  <text class="label" x="475" y="145">gRPC/REST</text>
+  
+  <!-- Step 3: Scoreboard to PostgreSQL -->
+  <path class="arrow" d="M 650 160 L 650 280"/>
+  <text class="step" x="665" y="215">3</text>
+  <text class="label" x="670" y="230" font-size="10">Persist score</text>
+  <text class="label" x="670" y="242" font-size="10">+ audit trail</text>
+  
+  <!-- Step 4: PostgreSQL to Redis -->
+  <path class="arrow" d="M 650 350 L 650 440"/>
+  <text class="step" x="665" y="390">4</text>
+  <text class="label" x="670" y="405" font-size="10">Publish event</text>
+  
+  <!-- Step 5: Redis to WebSocket Hub -->
+  <path class="arrow" d="M 580 475 L 440 640"/>
+  <text class="step" x="485" y="545">5</text>
+  <text class="label" x="445" y="565" font-size="10">Fan-out</text>
+  <text class="label" x="445" y="577" font-size="10">live updates</text>
+  
+  <!-- Step 6: Redis to CDN -->
+  <path class="arrow" d="M 720 475 L 880 640"/>
+  <text class="step" x="820" y="545">6</text>
+  <text class="label" x="785" y="565" font-size="10">Cache</text>
+  <text class="label" x="785" y="577" font-size="10">invalidation</text>
+  
+  <!-- Step 7a: WebSocket Hub to Connected UIs -->
+  <path class="arrow" d="M 280 665 L 170 785"/>
+  <text class="step" x="210" y="715">7a</text>
+  <text class="label" x="180" y="735" font-size="10">Push</text>
+  <text class="label" x="180" y="747" font-size="10">leaderboard</text>
+  
+  <!-- Step 7b: CDN to SEO clients -->
+  <path class="arrow" d="M 960 680 L 980 760"/>
+  <text class="step" x="975" y="715">7b</text>
+  <text class="label" x="995" y="725" font-size="10">Serve</text>
+  <text class="label" x="995" y="737" font-size="10">snapshot</text>
+  
+  <!-- Background legend -->
+  <rect x="20" y="850" width="1160" height="40" fill="#f7fafc" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+  <text x="30" y="872" font-size="11" font-weight="600" fill="#2d3748">Legend:</text>
+  <rect x="90" y="860" width="20" height="20" class="primary" rx="2"/>
+  <text x="115" y="873" font-size="11" fill="#2d3748">Client</text>
+  <rect x="170" y="860" width="20" height="20" class="secondary" rx="2"/>
+  <text x="195" y="873" font-size="11" fill="#2d3748">Gateway/Hub</text>
+  <rect x="290" y="860" width="20" height="20" class="tertiary" rx="2"/>
+  <text x="315" y="873" font-size="11" fill="#2d3748">Core Service</text>
+  <rect x="420" y="860" width="20" height="20" class="quaternary" rx="2"/>
+  <text x="445" y="873" font-size="11" fill="#2d3748">Data Store</text>
+  
+  <!-- Flow description boxes -->
+  <rect x="850" y="70" width="330" height="250" fill="#edf2f7" stroke="#a0aec0" stroke-width="1" rx="6"/>
+  <text x="870" y="95" font-size="14" font-weight="700" fill="#1a202c">Flow Description</text>
+  
+  <text x="870" y="120" font-size="11" fill="#2d3748" font-weight="600">1. User Action</text>
+  <text x="885" y="135" font-size="10" fill="#4a5568">Signed request with JWT + nonce</text>
+  
+  <text x="870" y="160" font-size="11" fill="#2d3748" font-weight="600">2. Authentication</text>
+  <text x="885" y="175" font-size="10" fill="#4a5568">Verify token, check rate limits</text>
+  
+  <text x="870" y="200" font-size="11" fill="#2d3748" font-weight="600">3. Score Update</text>
+  <text x="885" y="215" font-size="10" fill="#4a5568">Transactional write + validation</text>
+  
+  <text x="870" y="240" font-size="11" fill="#2d3748" font-weight="600">4. Event Publishing</text>
+  <text x="885" y="255" font-size="10" fill="#4a5568">Notify downstream consumers</text>
+  
+  <text x="870" y="280" font-size="11" fill="#2d3748" font-weight="600">5-7. Propagation</text>
+  <text x="885" y="295" font-size="10" fill="#4a5568">Real-time push + cache refresh</text>
+</svg>
